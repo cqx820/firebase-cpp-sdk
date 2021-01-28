@@ -214,6 +214,10 @@ class TestBannerViewListener : public firebase::admob::BannerView::Listener {
   std::vector<firebase::admob::BoundingBox> bounding_box_changes_;
 };
 
+TEST_F(FirebaseAdMobTest, TestInitialization) {
+  // Already tested via SetUp and TearDown.
+}
+
 TEST_F(FirebaseAdMobTest, TestBannerView) {
   // AdMob cannot be tested on Firebase Test Lab, so disable tests on FTL.
   TEST_REQUIRES_USER_INTERACTION;
