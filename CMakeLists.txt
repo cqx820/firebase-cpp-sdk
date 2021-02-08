@@ -71,7 +71,7 @@ option(FIREBASE_CPP_USE_PRIOR_GRADLE_BUILD
         "When building with Gradle, use the previously built libraries." OFF)
 option(FIREBASE_USE_BORINGSSL
         "Build against BoringSSL instead of using your system's OpenSSL." OFF)
-option(FIREBASE_USE_LINUX_CXX11_ABI
+option(FIREBASE_LINUX_USE_CXX11_ABI
         "Build Linux SDK using the C++11 ABI instead of the legacy ABI." OFF)
 
 set(FIREBASE_ANDROID_STL "" CACHE STRING "STL implementation to use.")
@@ -235,7 +235,7 @@ if(DESKTOP)
   message(STATUS "Building external project dependencies...")
   build_external_dependencies()
   message(STATUS "Build of external project dependencies complete.")
-  
+
   if(FIREBASE_USE_BORINGSSL)
     set(OPENSSL_FOUND TRUE CACHE BOOL "" FORCE)
     set(OPENSSL_NO_ASM TRUE)  # Force cross-platform BoringSSL, no ASM.
@@ -244,7 +244,7 @@ if(DESKTOP)
     set(OPENSSL_SSL_LIBRARIES ${OPENSSL_SSL_LIBRARY})
     set(OPENSSL_LIBRARIES ${OPENSSL_SSL_LIBRARIES} ${OPENSSL_CRYPTO_LIBRARIES})
     set(OPENSSL_VERSION '1.1.0' CACHE STRING "" FORCE)
-  
+
     add_library(OpenSSL::SSL STATIC IMPORTED)
     add_library(OpenSSL::Crypto STATIC IMPORTED)
     set_target_properties(OpenSSL::SSL PROPERTIES
@@ -252,14 +252,14 @@ if(DESKTOP)
       INTERFACE_INCLUDE_DIRECTORIES "${OPENSSL_INCLUDE_DIR}"
       INTERFACE_LINK_LIBRARIES OpenSSL::Crypto
     )
-  
+
     set_target_properties(OpenSSL::Crypto PROPERTIES
       IMPORTED_LOCATION "${OPENSSL_CRYPTO_LIBRARY}"
       INTERFACE_INCLUDE_DIRECTORIES "${OPENSSL_INCLUDE_DIR}"
     )
     # Now if we do find_package(OpenSSL) it should give us BoringSSL.
     find_package(OpenSSL)
-  
+
     if(NOT "${OPENSSL_INCLUDE_DIR}" MATCHES boringssl OR
        NOT "${OPENSSL_SSL_LIBRARY}" MATCHES boringssl OR
        NOT "${OPENSSL_CRYPTO_LIBRARY}" MATCHES boringssl)
